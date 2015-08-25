@@ -47,8 +47,18 @@
 - (void)drawRect:(CGRect)rect
 {
     // Drawing finished lines in black
-    [[UIColor blackColor] set];
+    
     for (BNRLine *line in self.finishedLines) {
+        if (line.lineAngle >= -180 && line.lineAngle <= -90) {
+            [[UIColor blackColor] set];
+        } else if (line.lineAngle > -90 && line.lineAngle < 0) {
+            [[UIColor blueColor] set];
+        } else if (line.lineAngle >= 0 && line.lineAngle <90) {
+            [[UIColor whiteColor] set];
+        } else {
+            [[UIColor greenColor] set];
+        }
+        
         [self strokeLine:line];
     }
     
@@ -82,7 +92,7 @@
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
     // Logging out order of events
-    NSLog(@"%@", NSStringFromSelector(_cmd));
+//    NSLog(@"%@", NSStringFromSelector(_cmd));
     
     for (UITouch *t in touches) {
         
@@ -105,6 +115,12 @@
         
         NSValue *key = [NSValue valueWithNonretainedObject:t];
         BNRLine *line = self.linesInProgress[key];
+        line.end = [t locationInView:self];
+        
+        float angleVal = (((atan2((line.end.x - line.begin.x) , (line.end.y - line.begin.y)))*180)/M_PI);
+        
+        NSLog(@"%.2f", angleVal);
+        line.lineAngle = angleVal;
         
         [self.finishedLines addObject:line];
         [self.linesInProgress removeObjectForKey:key];
