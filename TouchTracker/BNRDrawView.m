@@ -111,6 +111,10 @@
     // Logging out order of events
     NSLog(@"%@", NSStringFromSelector(_cmd));
     
+    if (self.selectedLine) {
+        return;
+    }
+    
     for (UITouch *t in touches) {
         
         CGPoint location = [t locationInView:self];
@@ -148,6 +152,10 @@
 {
     // Logging out order of events
     NSLog(@"%@", NSStringFromSelector(_cmd));
+    
+    if (self.selectedLine) {
+        return;
+    }
     
     for (UITouch *t in touches) {
         
